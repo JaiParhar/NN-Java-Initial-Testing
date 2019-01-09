@@ -95,7 +95,7 @@ public class Network {
 			synapses.add(biasSynapses[inEndS]);
 			
 			//Calculates value of neuron
-			biasSynapses[inEndS].child.setValueFromSynapses((Synapse[])synapses.toArray());
+			biasSynapses[inEndS].child.setValueFromSynapses(synapses);
 			
 			//Clears arraylist to be used in next iteration of loop
 			synapses.clear();
@@ -110,7 +110,7 @@ public class Network {
 				}
 
 				//Calculates the value of the child neuron
-				hiddenSynapses[layer][0][end].child.setValueFromSynapses((Synapse[])synapses.toArray());
+				hiddenSynapses[layer][0][end].child.setValueFromSynapses(synapses);
 				
 				//Clears the arraylist to be used in next iteration of loop
 				synapses.clear();
@@ -125,7 +125,7 @@ public class Network {
 			}
 			
 			//Calculates the value of the child neuron
-			outputSynapses[0][outEndS].child.setValueFromSynapses((Synapse[])synapses.toArray());
+			outputSynapses[0][outEndS].child.setValueFromSynapses(synapses);
 			
 			//Clears the arraylist to be used in next iteration of loop
 			synapses.clear();
