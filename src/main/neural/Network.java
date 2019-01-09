@@ -51,10 +51,10 @@ public class Network {
 		}
 		
 		//Last layer of hidden to output
-		outputSynapses = new Synapse[outputLayer.length][hiddenLayers[0].length];
+		outputSynapses = new Synapse[hiddenLayers[0].length][outputLayer.length];
 		for(int on = 0; on < outputLayer.length; on++) {	
 			for(int hn = 0; hn < hiddenLayers[0].length; hn++) {
-				outputSynapses[on][hn] = new Synapse(hiddenLayers[hiddenLayers.length-1][hn], outputLayer[on]);
+				outputSynapses[hn][on] = new Synapse(hiddenLayers[hiddenLayers.length-1][hn], outputLayer[on]);
 			}
 		}
 	}
@@ -124,14 +124,17 @@ public class Network {
 				synapses.add(outputSynapses[outStartS][outEndS]);
 			}
 			
-			//Calculates the value of the child neuron, then sigmoids it because it is at the end
+			//Calculates the value of the child neuron
 			outputSynapses[0][outEndS].child.setValueFromSynapses(synapses);
-			outputSynapses[0][outEndS].child.sigmoidValue();
 			
 			//Clears the arraylist to be used in next iteration of loop
 			synapses.clear();
 		}
 	}
+	
+	public Synapse[][] getInputSynapses() { return inputSynapses; }
+	public Synapse[][] getHiddenSynapses(int layer) { return hiddenSynapses[layer]; }
+	public Synapse[][] getOutputSynapses() { return outputSynapses; }
 	
 	public Neuron[] getInputLayer() { return inputLayer; }
 	public Neuron[] getHiddenLayer(int layer) { return hiddenLayers[layer]; }
