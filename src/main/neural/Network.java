@@ -1,7 +1,5 @@
 package main.neural;
 
-import java.util.ArrayList;
-
 public class Network {
 
 	Neuron inputLayer[];
