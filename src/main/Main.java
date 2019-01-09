@@ -7,7 +7,7 @@ public class Main {
 	public static void main(String[] args) {
 		Network net = new Network(1, 2, 5, 3);
 		
-		net.getInputLayer()[0].setValue(1);
+		net.getInputLayer()[0].setValue(0.5);
 		net.randomizeSynapseWeights(420, 1);
 		net.calculateNetwork();
 		
