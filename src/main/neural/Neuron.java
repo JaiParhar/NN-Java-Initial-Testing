@@ -28,16 +28,14 @@ public class Neuron {
 		value = 0;
 		for(int i = 0; i < s.size(); i++) {
 			value += s.get(i).getCalculatedValue();
-		}	
-		sigmoidValue();
+		}
 	}
 	
 	public void setValueFromSynapses(Synapse s[]) {
 		value = 0;
 		for(int i = 0; i < s.length; i++) {
 			value += s[i].getCalculatedValue();
-		}	
-		sigmoidValue();
+		}
 	}
 	
 	public void addToValue(double i) {

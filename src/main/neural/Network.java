@@ -124,8 +124,9 @@ public class Network {
 				synapses.add(outputSynapses[outStartS][outEndS]);
 			}
 			
-			//Calculates the value of the child neuron
+			//Calculates the value of the child neuron, then sigmoids it because it is at the end
 			outputSynapses[0][outEndS].child.setValueFromSynapses(synapses);
+			outputSynapses[0][outEndS].child.sigmoidValue();
 			
 			//Clears the arraylist to be used in next iteration of loop
 			synapses.clear();
