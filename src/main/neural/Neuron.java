@@ -31,10 +31,11 @@ public class Neuron {
 		return layer;
 	}
 	
-	public void setValueFromSynapses(ArrayList<Synapse> s) {
+	public void setValueFromSynapses(Synapse s[]) {
+		//TODO: USE SIGMOID HERE TO ENSURE VALUE LESS THAN 1
 		value = 0;
-		for(int i = 0; i < s.size(); i++) {
-			value += s.get(i).getCalculatedValue();
+		for(int i = 0; i < s.length; i++) {
+			value += s[i].getCalculatedValue();
 		}
 	}
 	
