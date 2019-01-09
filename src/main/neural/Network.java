@@ -1,5 +1,7 @@
 package main.neural;
 
+import java.util.ArrayList;
+
 public class Network {
 
 	Neuron inputLayer[];
@@ -15,6 +17,10 @@ public class Network {
 	Synapse outputSynapses[][];
 	
 	public Network(int inNeurons, int hLayers, int hNeurons, int outNeurons) {
+		if(hLayers < 1) {
+			System.out.println("Error: At least 1 hidden layer is required");
+			System.exit(-1);
+		}
 		initNeurons(inNeurons, hLayers, hNeurons, outNeurons);
 		initSynapses();
 	}
@@ -72,6 +78,57 @@ public class Network {
 		outputLayer = new Neuron[outNeurons];
 		for(int out = 0; out < outNeurons; out++) {
 			outputLayer[out] = new Neuron(1+hLayers);
+		}
+	}
+	
+	public void calculateNetwork() {
+		ArrayList<Synapse> synapses = new ArrayList<Synapse>();
+		
+		//Calculating the first layer of hidden neurons from input layer
+		for(int inEndS = 0; inEndS < inputSynapses[0].length; inEndS++) {
+			for(int inStartS = 0; inStartS < inputSynapses.length; inStartS++) {
+				//Adds all the synapses that end in neuron inEndS to the arraylist, except for bias neuron	
+				synapses.add(inputSynapses[inStartS][inEndS]);
+			}
+			
+			//Adds bias neuron to arraylist
+			synapses.add(biasSynapses[inEndS]);
+			
+			//Calculates value of neuron
+			biasSynapses[inEndS].child.setValueFromSynapses((Synapse[])synapses.toArray());
+			
+			//Clears arraylist to be used in next iteration of loop
+			synapses.clear();
+		}
+		
+		//Calculates hidden layers of neurons
+		for(int layer = 0; layer < hiddenSynapses.length; layer++) {
+			for(int end = 0; end < hiddenSynapses[layer][0].length; end++) {
+				for(int start = 0; start < hiddenSynapses[layer].length; start++) {
+					//Adds all synapses in Layer layer that end in end to the arraylist
+					synapses.add(hiddenSynapses[layer][start][end]);
+				}
+
+				//Calculates the value of the child neuron
+				hiddenSynapses[layer][0][end].child.setValueFromSynapses((Synapse[])synapses.toArray());
+				
+				//Clears the arraylist to be used in next iteration of loop
+				synapses.clear();
+			}
+		}
+		
+		//Calculates output layer of neurons
+		for(int outEndS = 0; outEndS < outputSynapses[0].length; outEndS++) {
+			for(int outStartS = 0; outStartS < outputSynapses.length; outStartS++) {
+				//Adds all synapses in that end in outEndS to the arraylist
+				synapses.add(outputSynapses[outStartS][outEndS]);
+			}
+			
+			//Calculates the value of the child neuron
+			outputSynapses[0][outEndS].child.setValueFromSynapses((Synapse[])synapses.toArray());
+			
+			//Clears the arraylist to be used in next iteration of loop
+			synapses.clear();
 		}
 	}
 	

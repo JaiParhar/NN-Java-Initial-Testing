@@ -1,7 +1,5 @@
 package main.neural;
 
-import java.util.ArrayList;
-
 public class Neuron {
 
 	double value;
@@ -20,23 +18,30 @@ public class Neuron {
 		value = v;
 	}
 	
-	public void setValue(ArrayList<Double> v) {
-		value = 0;
-		for(int i = 0; i < v.size(); i++) {
-			value += v.get(i);
-		}
-	}
-	
 	public int getLayer() {
 		return layer;
 	}
 	
 	public void setValueFromSynapses(Synapse s[]) {
-		//TODO: USE SIGMOID HERE TO ENSURE VALUE LESS THAN 1
 		value = 0;
 		for(int i = 0; i < s.length; i++) {
 			value += s[i].getCalculatedValue();
 		}
+		
+		sigmoidValue();
+	}
+	
+	public void addToValue(double i) {
+		value += i;
+	}
+	
+	public void sigmoidValue() {
+		value = sigmoid(value);
+	}
+	
+	private double sigmoid(double x)
+	{
+	    return 1 / (1 + Math.exp(-x));
 	}
 	
 }
