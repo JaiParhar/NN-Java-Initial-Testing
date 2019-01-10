@@ -1,21 +1,33 @@
 package main;
 
-import main.genetic.Individual;
-import main.neural.Network;
+import java.util.HashMap;
+import java.util.Map;
+
+import main.genetic.Generation;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		Network n = new Network(1, 1, 1, 1);
-		//n.randomizeNeuronBiases(102, 10);
-		//n.randomizeSynapseWeights(2, 10);
-		//System.out.println(n.getOutputSynapses()[0][0].getWeight());
+		Map<String, Integer> questions = new HashMap<String, Integer>();
+		questions.put("a", 0);
+		questions.put("b", 1);
+		questions.put("c", 0);
+		questions.put("d", 1);
+		questions.put("e", 0);
+		questions.put("f", 1);
+		questions.put("g", 0);
+		questions.put("h", 1);
+		questions.put("i", 0);
+		questions.put("j", 1);
+		questions.put("k", 0);
+		questions.put("l", 1);
 		
-		Individual ind = new Individual();
-		ind.generateRandom(423);
-		System.out.println(ind.inputString("Hello", 0));
-		
+		for(int i = 0; i < 1000;i++) {
+			Generation g1 = new Generation(100, 1231231231);
+			g1.testIndividuals(questions);
+			System.out.println(g1.getIndividuals().get(99).correctAnswer);
+		}
 	}
 
 }

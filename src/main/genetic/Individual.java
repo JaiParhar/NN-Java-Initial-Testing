@@ -9,8 +9,8 @@ public class Individual {
 	public static final int MAX_LETTERS = 20;
 	
 	public static final int INPUT_NEURONS = 26 * MAX_LETTERS;
-	public static final int HIDDEN_LAYERS = 2;
-	public static final int HIDDEN_NEURONS = 50;
+	public static final int HIDDEN_LAYERS = 1;
+	public static final int HIDDEN_NEURONS = 16;
 	public static final int OUTPUT_NEURONS = 2;
 	
 	public static final double WEIGHT_RANGE = 10;
@@ -18,9 +18,14 @@ public class Individual {
 	
 	Network network;
 	
+	public int correctAnswer;
+	int testRuns;
+	
 	double fitness;
 	
 	public Individual() {
+		correctAnswer = 0;
+		testRuns = 0;
 		fitness = 0.0;
 		network = new Network(INPUT_NEURONS, HIDDEN_LAYERS, HIDDEN_NEURONS, OUTPUT_NEURONS);
 	}
@@ -75,7 +80,7 @@ public class Individual {
 			}
 		}
 		
-		return highestIndex == correctOutputIndex;
+		return (highestIndex == correctOutputIndex);
 	}
 	
 	public static Individual getMutatedIndividual(Individual indiv, int mutations, int seed) {
@@ -142,6 +147,12 @@ public class Individual {
 		}
 		
 		return indiv;
+	}
+	
+	public void recordTestRun(boolean correct) {
+		if(correct) { correctAnswer++; }
+		testRuns++;
+		setFitness(((double)correctAnswer) / ((double)testRuns));
 	}
 	
 	public double getFitness() {

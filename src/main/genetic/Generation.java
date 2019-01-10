@@ -1,6 +1,9 @@
 package main.genetic;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Map;
 
 public class Generation {
 	
@@ -15,8 +18,20 @@ public class Generation {
 		}
 	}
 	
-	public void testIndividuals() {
+	public void testIndividuals(Map<String, Integer> tests) {
+		tests.forEach((question, answer) -> {
+			for(int i = 0; i < generation.size(); i++) {
+				generation.get(i).recordTestRun(generation.get(i).inputString(question, answer));
+			}
+		});
 		
+		Collections.sort(generation, new Comparator<Individual>() {
+			@Override
+			public int compare(Individual c1, Individual c2) {
+				if (c1.getFitness() > c2.getFitness()) return -1;
+				if (c1.getFitness() < c2.getFitness()) return 1;
+				return 0;
+		}});
 	}
 	
 	public static Generation mutateGeneration(Generation inGen, int mutations, int startingSeed) {
