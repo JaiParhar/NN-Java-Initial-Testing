@@ -18,7 +18,10 @@ public class Individual {
 	
 	Network network;
 	
+	double fitness;
+	
 	public Individual() {
+		fitness = 0.0;
 		network = new Network(INPUT_NEURONS, HIDDEN_LAYERS, HIDDEN_NEURONS, OUTPUT_NEURONS);
 	}
 	
@@ -139,6 +142,14 @@ public class Individual {
 		}
 		
 		return indiv;
+	}
+	
+	public double getFitness() {
+		return fitness;
+	}
+	
+	public void setFitness(double f) {
+		fitness = f;
 	}
 	
 }
