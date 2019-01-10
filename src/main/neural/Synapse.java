@@ -9,7 +9,7 @@ public class Synapse {
 	public Synapse(Neuron p, Neuron c) {
 		parent = p;
 		child = c;
-		weight = 1;
+		weight = 1.0;
 	}
 	
 	public double getCalculatedValue() {

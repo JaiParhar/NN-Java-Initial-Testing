@@ -6,14 +6,10 @@ import java.util.Random;
 public class Network {
 
 	Neuron inputLayer[];
-	Neuron bias;
-	
 	Neuron hiddenLayers[][];
-	
 	Neuron outputLayer[];
 	
 	Synapse inputSynapses[][];
-	Synapse biasSynapses[];
 	Synapse hiddenSynapses[][][];
 	Synapse outputSynapses[][];
 	
@@ -33,12 +29,6 @@ public class Network {
 			for(int hn = 0; hn < hiddenLayers[0].length; hn++) {
 				inputSynapses[in][hn] = new Synapse(inputLayer[in], hiddenLayers[0][hn]);
 			}
-		}
-		
-		//Bias to first layer of hidden
-		biasSynapses = new Synapse[hiddenLayers[0].length];
-		for(int hn = 0; hn < hiddenLayers[0].length; hn++) {
-			biasSynapses[hn] = new Synapse(bias, hiddenLayers[0][hn]);
 		}
 		
 		//Hidden layers to each other
@@ -66,9 +56,6 @@ public class Network {
 			inputLayer[in] = new Neuron(0);
 		}
 		
-		bias = new Neuron(0);
-		bias.setValue(1.0);
-		
 		hiddenLayers = new Neuron[hLayers][hNeurons];
 		for(int hL = 0; hL < hLayers; hL++) {
 			for(int hN = 0; hN < hNeurons; hN++) {
@@ -92,11 +79,8 @@ public class Network {
 				synapses.add(inputSynapses[inStartS][inEndS]);
 			}
 			
-			//Adds bias neuron to arraylist
-			synapses.add(biasSynapses[inEndS]);
-			
 			//Calculates value of neuron
-			biasSynapses[inEndS].child.setValueFromSynapses(synapses);
+			inputSynapses[0][inEndS].child.setValueFromSynapses(synapses);
 			
 			//Clears arraylist to be used in next iteration of loop
 			synapses.clear();
@@ -130,6 +114,26 @@ public class Network {
 			
 			//Clears the arraylist to be used in next iteration of loop
 			synapses.clear();
+		}
+	}
+	
+	public void randomizeNeuronBiases(int seed, double range) {
+		Random r = new Random(seed);
+		
+		//Input neurons will not have a bias, as they do not get calculated
+		
+		//Hidden neurons
+		for(int i = 0; i < hiddenLayers.length; i++) {
+			for(int j = 0; j < hiddenLayers[i].length; j++) {
+				if(r.nextBoolean()) { hiddenLayers[i][j].setBias(r.nextDouble() * range); }
+				else { hiddenLayers[i][j].setBias(r.nextDouble() * range * -1.0); }
+			}
+		}
+		
+		//Hidden neurons
+		for(int i = 0; i < outputLayer.length; i++) {
+			if(r.nextBoolean()) { outputLayer[i].setBias(r.nextDouble() * range); }
+			else { outputLayer[i].setBias(r.nextDouble() * range * -1.0); }
 		}
 	}
 	
