@@ -38,6 +38,7 @@ public class Individual {
 	}
 	
 	public static Individual getMutatedIndividual(Individual indiv, int mutations, int seed) {
+		Random r = new Random(seed);
 		while(mutations > 0) {
 			int totalNeurons = INPUT_NEURONS + (HIDDEN_LAYERS * HIDDEN_NEURONS) + OUTPUT_NEURONS;
 			int totalSynapses 
@@ -46,8 +47,6 @@ public class Individual {
 					+ (indiv.getNetwork().getOutputSynapses().length * indiv.getNetwork().getOutputSynapses()[0].length);
 			
 			double mutationChance = 1.0/((double)totalNeurons + (double)totalSynapses);
-			
-			Random r = new Random(seed);
 			
 			//Mutate hidden layers
 			for(int i = 0; i < HIDDEN_LAYERS; i++) {
@@ -69,9 +68,31 @@ public class Individual {
 			
 			//Mutate input synapses
 			for(int i = 0; i < indiv.getNetwork().getInputSynapses().length; i++) {
-				for(int j = 0; j < indiv.getNetwork().getInputSynapses()[0].length; j++) { 
+				for(int j = 0; j < indiv.getNetwork().getInputSynapses()[i].length; j++) { 
 					if(r.nextDouble() < mutationChance) {
 						indiv.getNetwork().getInputSynapses()[i][j].randomizeWeight(r, WEIGHT_RANGE);
+						mutations--;
+					}
+				}
+			}
+			
+			//Mutate hidden synapses
+			for(int i = 0; i < indiv.getNetwork().getHiddenSynapses().length; i++) {
+				for(int j = 0; j < indiv.getNetwork().getHiddenSynapses()[i].length; j++) {
+					for(int k = 0; k < indiv.getNetwork().getHiddenSynapses()[i][j].length; k++) {
+						if(r.nextDouble() < mutationChance) {
+							indiv.getNetwork().getHiddenSynapses()[i][j][k].randomizeWeight(r, WEIGHT_RANGE);
+							mutations--;
+						}
+					}
+				}
+			}
+			
+			//Mutate output synapses
+			for(int i = 0; i < indiv.getNetwork().getOutputSynapses().length; i++) {
+				for(int j = 0; j < indiv.getNetwork().getOutputSynapses()[i].length; j++) { 
+					if(r.nextDouble() < mutationChance) {
+						indiv.getNetwork().getOutputSynapses()[i][j].randomizeWeight(r, WEIGHT_RANGE);
 						mutations--;
 					}
 				}
