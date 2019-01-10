@@ -1,10 +1,20 @@
 package main.neural;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Network {
+public class Network implements Serializable {
 
+	private static final long serialVersionUID = -9209288686210961120L;
+	
 	Neuron inputLayer[];
 	Neuron hiddenLayers[][];
 	Neuron outputLayer[];
@@ -169,11 +179,19 @@ public class Network {
 		
 	}
 	
-	public String saveNetwork() {
-		
-		
-		
-		return null;
+	public static void saveToFile(Network neuralNet, String path) throws IOException {
+		FileOutputStream f = new FileOutputStream("C:/Users/Kush/Desktop/network.nn");
+		ObjectOutput s = new ObjectOutputStream(f);
+		s.writeObject(neuralNet);
+		s.close();
+	}
+	
+	public static Network loadFromFile(String path) throws Exception {
+		FileInputStream f = new FileInputStream("C:/Users/Kush/Desktop/network.nn");
+		ObjectInput s = new ObjectInputStream(f);
+		Network neuralNet = (Network) s.readObject();
+		s.close();
+		return neuralNet;
 	}
 	
 	public Synapse[][] getInputSynapses() { return inputSynapses; }

@@ -1,6 +1,11 @@
 package main.neural;
 
-public class Synapse {
+import java.io.Serializable;
+
+public class Synapse implements Serializable{
+	
+	private static final long serialVersionUID = 3177958368398327122L;
+
 	double weight;
 	
 	Neuron parent;

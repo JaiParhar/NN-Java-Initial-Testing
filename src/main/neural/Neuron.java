@@ -1,9 +1,12 @@
 package main.neural;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Neuron {
+public class Neuron implements Serializable{
 
+	private static final long serialVersionUID = -8187992277576278733L;
+	
 	double value;
 	double bias;
 	int layer;
