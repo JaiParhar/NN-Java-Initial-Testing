@@ -6,10 +6,12 @@ import main.neural.Network;
 
 public class Individual {
 
-	public static final int INPUT_NEURONS = 26*20;
+	public static final int MAX_LETTERS = 20;
+	
+	public static final int INPUT_NEURONS = 26 * MAX_LETTERS;
 	public static final int HIDDEN_LAYERS = 2;
 	public static final int HIDDEN_NEURONS = 50;
-	public static final int OUTPUT_NEURONS = 3;
+	public static final int OUTPUT_NEURONS = 2;
 	
 	public static final double WEIGHT_RANGE = 10;
 	public static final double BIAS_RANGE = 10;
@@ -35,6 +37,42 @@ public class Individual {
 	
 	public Network getNetwork() {
 		return network;
+	}
+	
+	public boolean inputString(String input, int correctOutputIndex) {
+		
+		String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		
+		input = input.toUpperCase();
+		if(input.length() > MAX_LETTERS) {
+			input = input.substring(0, MAX_LETTERS);
+		}
+		
+		//Iterates through each letter in the input
+		for(int in = 0; in < input.length(); in++) {
+			char currLet = input.charAt(in);
+			for(int alphabet = 0; alphabet < letters.length(); alphabet++) {
+				if(currLet == letters.charAt(alphabet)) {
+					network.getInputLayer()[alphabet+26*in].setValue(1.0);
+				} else {
+					network.getInputLayer()[alphabet+26*in].setValue(1.0);
+				}
+			}
+			
+		}
+		
+		network.calculateNetwork();
+		
+		double highestValue = 0.0;
+		int highestIndex = -1;
+		for(int i = 0; i < network.getOutputLayer().length; i++) {
+			if(network.getOutputLayer()[i].getValue() > highestValue) {
+				highestValue = network.getOutputLayer()[i].getValue();
+				highestIndex = i;
+			}
+		}
+		
+		return highestIndex == correctOutputIndex;
 	}
 	
 	public static Individual getMutatedIndividual(Individual indiv, int mutations, int seed) {

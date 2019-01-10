@@ -13,17 +13,8 @@ public class Main {
 		//System.out.println(n.getOutputSynapses()[0][0].getWeight());
 		
 		Individual ind = new Individual();
-		ind.generateRandom(420);
-		
-		int i = 0;
-		while(true) {
-			double a = ind.getNetwork().getOutputLayer()[0].getBias();
-			ind = Individual.getMutatedIndividual(ind, 100, i); i++;
-			double b = ind.getNetwork().getOutputLayer()[0].getBias();
-			System.out.println(a + " " + b);
-			if(a != b) { System.out.println(a + " " + b); break; }
-			
-		}
+		ind.generateRandom(423);
+		System.out.println(ind.inputString("Hello", 0));
 		
 	}
 
