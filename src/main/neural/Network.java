@@ -169,11 +169,20 @@ public class Network {
 		
 	}
 	
+	public String saveNetwork() {
+		
+		
+		
+		return null;
+	}
+	
 	public Synapse[][] getInputSynapses() { return inputSynapses; }
+	public Synapse[][][] getHiddenSynapses() { return hiddenSynapses; }
 	public Synapse[][] getHiddenSynapses(int layer) { return hiddenSynapses[layer]; }
 	public Synapse[][] getOutputSynapses() { return outputSynapses; }
 	
 	public Neuron[] getInputLayer() { return inputLayer; }
+	public Neuron[][] getHiddenLayer() { return hiddenLayers; }
 	public Neuron[] getHiddenLayer(int layer) { return hiddenLayers[layer]; }
 	public Neuron[] getOutputLayer() { return outputLayer; }
 	
