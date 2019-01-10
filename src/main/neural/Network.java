@@ -135,15 +135,13 @@ public class Network implements Serializable {
 		//Hidden neurons
 		for(int i = 0; i < hiddenLayers.length; i++) {
 			for(int j = 0; j < hiddenLayers[i].length; j++) {
-				if(r.nextBoolean()) { hiddenLayers[i][j].setBias(r.nextDouble() * range); }
-				else { hiddenLayers[i][j].setBias(r.nextDouble() * range * -1.0); }
+				hiddenLayers[i][j].randomizeBias(r, range);
 			}
 		}
 		
 		//Hidden neurons
 		for(int i = 0; i < outputLayer.length; i++) {
-			if(r.nextBoolean()) { outputLayer[i].setBias(r.nextDouble() * range); }
-			else { outputLayer[i].setBias(r.nextDouble() * range * -1.0); }
+			outputLayer[i].randomizeBias(r, range);
 		}
 	}
 	
@@ -153,8 +151,7 @@ public class Network implements Serializable {
 		//Input synapses
 		for(int i = 0; i < inputSynapses.length; i++) {
 			for(int j = 0; j < inputSynapses[i].length; j++) {
-				if(r.nextBoolean()) { inputSynapses[i][j].setWeight(r.nextDouble() * range); }
-				else { inputSynapses[i][j].setWeight(r.nextDouble() * range * -1.0); }
+				inputSynapses[i][j].randomizeWeight(r, range);
 			}
 		}
 		
@@ -162,8 +159,7 @@ public class Network implements Serializable {
 		for(int i = 0; i < hiddenSynapses.length; i++) {
 			for(int j = 0; j < hiddenSynapses[i].length; j++) {
 				for(int k = 0; k < hiddenSynapses[i][j].length; k++) {
-					if(r.nextBoolean()) { hiddenSynapses[i][j][k].setWeight(r.nextDouble() * range); }
-					else { hiddenSynapses[i][j][k].setWeight(r.nextDouble() * range * -1.0); }
+					hiddenSynapses[i][j][k].randomizeWeight(r, range);
 				}
 			}
 		}
@@ -171,8 +167,7 @@ public class Network implements Serializable {
 		//Output synapses
 		for(int i = 0; i < outputSynapses.length; i++) {
 			for(int j = 0; j < outputSynapses[i].length; j++) {
-				if(r.nextBoolean()) { outputSynapses[i][j].setWeight(r.nextDouble() * range); }
-				else { outputSynapses[i][j].setWeight(r.nextDouble() * range * -1.0); }
+				outputSynapses[i][j].randomizeWeight(r, range);
 			}
 		}
 		

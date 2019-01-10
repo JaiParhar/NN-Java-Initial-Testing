@@ -1,6 +1,7 @@
 package main.neural;
 
 import java.io.Serializable;
+import java.util.Random;
 
 public class Synapse implements Serializable{
 	
@@ -23,6 +24,11 @@ public class Synapse implements Serializable{
 	
 	public double getWeight() {
 		return weight;
+	}
+	
+	public void randomizeWeight(Random r, double range) {
+		if(r.nextBoolean()) { setWeight(r.nextDouble() * range); }
+		else { setWeight(r.nextDouble() * range * -1.0); }
 	}
 	
 	public void setWeight(double w) {

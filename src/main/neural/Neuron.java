@@ -2,6 +2,7 @@ package main.neural;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Neuron implements Serializable{
 
@@ -15,6 +16,13 @@ public class Neuron implements Serializable{
 		layer = l;
 		value = 0;
 		bias = 0;
+	}
+	
+	public void randomizeBias(Random r, double range) {
+		if(layer != 0) {
+			if(r.nextBoolean()) { setBias(r.nextDouble() * range); }
+			else { setBias(r.nextDouble() * range * -1.0); }
+		}
 	}
 	
 	public void setBias(double b) {
