@@ -9,9 +9,9 @@ public class Individual {
 	public static final int MAX_LETTERS = 20;
 	
 	public static final int INPUT_NEURONS = 26 * MAX_LETTERS;
-	public static final int HIDDEN_LAYERS = 1;
-	public static final int HIDDEN_NEURONS = 2;
-	public static final int OUTPUT_NEURONS = 2;
+	public static final int HIDDEN_LAYERS = 2;
+	public static final int HIDDEN_NEURONS = 50;
+	public static final int OUTPUT_NEURONS = 4;
 	
 	public static final double WEIGHT_RANGE = 10;
 	public static final double BIAS_RANGE = 10;
