@@ -12,9 +12,10 @@ public class Generation {
 	public Generation(int individualsPerGeneration, int startingSeed) {
 		generation = new ArrayList<Individual>();
 		for(int i = 0; i < individualsPerGeneration; i++) {
-			generation.add(new Individual());
-			generation.get(generation.size()-1).generateRandom(startingSeed);
-			startingSeed++;
+			Individual indiv = new Individual();
+			indiv.generateRandom(startingSeed);
+			generation.add(indiv);
+			startingSeed += i;
 		}
 	}
 	

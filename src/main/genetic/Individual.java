@@ -10,7 +10,7 @@ public class Individual {
 	
 	public static final int INPUT_NEURONS = 26 * MAX_LETTERS;
 	public static final int HIDDEN_LAYERS = 1;
-	public static final int HIDDEN_NEURONS = 16;
+	public static final int HIDDEN_NEURONS = 2;
 	public static final int OUTPUT_NEURONS = 2;
 	
 	public static final double WEIGHT_RANGE = 10;
@@ -61,9 +61,9 @@ public class Individual {
 			char currLet = input.charAt(in);
 			for(int alphabet = 0; alphabet < letters.length(); alphabet++) {
 				if(currLet == letters.charAt(alphabet)) {
-					network.getInputLayer()[alphabet+26*in].setValue(1.0);
+					network.getInputLayer()[alphabet+letters.length()*in].setValue(1.0);
 				} else {
-					network.getInputLayer()[alphabet+26*in].setValue(1.0);
+					network.getInputLayer()[alphabet+letters.length()*in].setValue(0.0);
 				}
 			}
 			
@@ -71,7 +71,7 @@ public class Individual {
 		
 		network.calculateNetwork();
 		
-		double highestValue = 0.0;
+		double highestValue = -1.0;
 		int highestIndex = -1;
 		for(int i = 0; i < network.getOutputLayer().length; i++) {
 			if(network.getOutputLayer()[i].getValue() > highestValue) {
@@ -147,6 +147,49 @@ public class Individual {
 		}
 		
 		return indiv;
+	}
+	
+	public void printWandB() {
+		System.out.println("Biases start");
+		for(int i = 0; i < HIDDEN_LAYERS; i++) {
+			for(int j = 0; j < HIDDEN_NEURONS; j++) {
+				System.out.println("Hidden neuron at [" + i + "][" + j + "] is " + getNetwork().getHiddenLayer()[i][j].getBias());
+			}
+		}
+		System.out.println();
+		
+		for(int out = 0; out < OUTPUT_NEURONS; out++) {
+			System.out.println("Output neuron at [" + out + "] is " + getNetwork().getOutputLayer()[out].getBias());
+		}
+		
+		System.out.println("Biases end");
+		System.out.println("Weight start");
+		
+		for(int i = 0; i < getNetwork().getInputSynapses().length; i++) {
+			for(int j = 0; j < getNetwork().getInputSynapses()[i].length; j++) { 
+				System.out.println("Input synapse weight at [" + i + "][" + j + "] is " + getNetwork().getInputSynapses()[i][j].getWeight());
+			}
+		}
+		
+		System.out.println();
+		
+		for(int i = 0; i < getNetwork().getHiddenSynapses().length; i++) {
+			for(int j = 0; j < getNetwork().getHiddenSynapses()[i].length; j++) {
+				for(int k = 0; k < getNetwork().getHiddenSynapses()[i][j].length; k++) {
+					System.out.println("Hidden synapse weight at [" + i + "][" + j + "][" + k + "] is " + getNetwork().getHiddenSynapses()[i][j][k].getWeight());
+				}
+			}
+		}
+		
+		System.out.println();
+		
+		for(int i = 0; i < getNetwork().getOutputSynapses().length; i++) {
+			for(int j = 0; j < getNetwork().getOutputSynapses()[i].length; j++) { 
+				System.out.println("Output synapse weight at [" + i + "][" + j + "] is " + getNetwork().getOutputSynapses()[i][j].getWeight());
+			}
+		}
+		
+		System.out.println("Weight end");
 	}
 	
 	public void recordTestRun(boolean correct) {
