@@ -15,9 +15,9 @@ public class Network implements Serializable {
 
 	private static final long serialVersionUID = -9209288686210961120L;
 	
-	Neuron inputLayer[];
-	Neuron hiddenLayers[][];
-	Neuron outputLayer[];
+	Neuron inputNeurons[];
+	Neuron hiddenNeurons[][];
+	Neuron outputNeurons[];
 	
 	Synapse inputSynapses[][];
 	Synapse hiddenSynapses[][][];
@@ -34,48 +34,48 @@ public class Network implements Serializable {
 	
 	private void initSynapses() {
 		//Input to first layer of hidden
-		inputSynapses = new Synapse[inputLayer.length][hiddenLayers[0].length];
-		for(int in = 0; in < inputLayer.length; in++) {
-			for(int hn = 0; hn < hiddenLayers[0].length; hn++) {
-				inputSynapses[in][hn] = new Synapse(inputLayer[in], hiddenLayers[0][hn]);
+		inputSynapses = new Synapse[inputNeurons.length][hiddenNeurons[0].length];
+		for(int in = 0; in < inputNeurons.length; in++) {
+			for(int hn = 0; hn < hiddenNeurons[0].length; hn++) {
+				inputSynapses[in][hn] = new Synapse(inputNeurons[in], hiddenNeurons[0][hn]);
 			}
 		}
 		
 		//Hidden layers to each other
-		hiddenSynapses = new Synapse[hiddenLayers.length-1][hiddenLayers[0].length][hiddenLayers[0].length];
-		for(int layer = 0; layer < hiddenLayers.length-1; layer++) {
-			for(int start = 0; start < hiddenLayers[layer].length; start++) {
-				for(int end = 0; end < hiddenLayers[layer+1].length; end++) {
-					hiddenSynapses[layer][start][end] = new Synapse(hiddenLayers[layer][start], hiddenLayers[layer+1][end]);
+		hiddenSynapses = new Synapse[hiddenNeurons.length-1][hiddenNeurons[0].length][hiddenNeurons[0].length];
+		for(int layer = 0; layer < hiddenNeurons.length-1; layer++) {
+			for(int start = 0; start < hiddenNeurons[layer].length; start++) {
+				for(int end = 0; end < hiddenNeurons[layer+1].length; end++) {
+					hiddenSynapses[layer][start][end] = new Synapse(hiddenNeurons[layer][start], hiddenNeurons[layer+1][end]);
 				}
 			}
 		}
 		
 		//Last layer of hidden to output
-		outputSynapses = new Synapse[hiddenLayers[0].length][outputLayer.length];
-		for(int on = 0; on < outputLayer.length; on++) {	
-			for(int hn = 0; hn < hiddenLayers[0].length; hn++) {
-				outputSynapses[hn][on] = new Synapse(hiddenLayers[hiddenLayers.length-1][hn], outputLayer[on]);
+		outputSynapses = new Synapse[hiddenNeurons[0].length][outputNeurons.length];
+		for(int on = 0; on < outputNeurons.length; on++) {	
+			for(int hn = 0; hn < hiddenNeurons[0].length; hn++) {
+				outputSynapses[hn][on] = new Synapse(hiddenNeurons[hiddenNeurons.length-1][hn], outputNeurons[on]);
 			}
 		}
 	}
 	
 	private void initNeurons(int inNeurons, int hLayers, int hNeurons, int outNeurons) {
-		inputLayer = new Neuron[inNeurons];
+		inputNeurons = new Neuron[inNeurons];
 		for(int in = 0; in < inNeurons; in++) {
-			inputLayer[in] = new Neuron(0);
+			inputNeurons[in] = new Neuron(0);
 		}
 		
-		hiddenLayers = new Neuron[hLayers][hNeurons];
+		hiddenNeurons = new Neuron[hLayers][hNeurons];
 		for(int hL = 0; hL < hLayers; hL++) {
 			for(int hN = 0; hN < hNeurons; hN++) {
-				hiddenLayers[hL][hN] = new Neuron(hL+1);
+				hiddenNeurons[hL][hN] = new Neuron(hL+1);
 			}
 		}
 		
-		outputLayer = new Neuron[outNeurons];
+		outputNeurons = new Neuron[outNeurons];
 		for(int out = 0; out < outNeurons; out++) {
-			outputLayer[out] = new Neuron(1+hLayers);
+			outputNeurons[out] = new Neuron(1+hLayers);
 		}
 	}
 	
@@ -133,15 +133,15 @@ public class Network implements Serializable {
 		//Input neurons will not have a bias, as they do not get calculated
 		
 		//Hidden neurons
-		for(int i = 0; i < hiddenLayers.length; i++) {
-			for(int j = 0; j < hiddenLayers[i].length; j++) {
-				hiddenLayers[i][j].randomizeBias(r, range);
+		for(int i = 0; i < hiddenNeurons.length; i++) {
+			for(int j = 0; j < hiddenNeurons[i].length; j++) {
+				hiddenNeurons[i][j].randomizeBias(r, range);
 			}
 		}
 		
 		//Hidden neurons
-		for(int i = 0; i < outputLayer.length; i++) {
-			outputLayer[i].randomizeBias(r, range);
+		for(int i = 0; i < outputNeurons.length; i++) {
+			outputNeurons[i].randomizeBias(r, range);
 		}
 	}
 	
@@ -169,9 +169,136 @@ public class Network implements Serializable {
 			for(int j = 0; j < outputSynapses[i].length; j++) {
 				outputSynapses[i][j].randomizeWeight(r, range);
 			}
+		}	
+		
+	}
+	
+	//TODO: ADD THRESHOLD FOR THE EQUALS TO STATEMENT IN THE LOOPS
+	private void gradientDescentNeurons(double desiredOutputs[], double descentStep) {
+		//CONCEPT:
+		//If the new cost is less than the old cost, keep the change you made
+		//If the new cost is greater than the old cost, make a change in the other direction
+		//If the cost is the same, revert the change
+		
+		for(int i = 0; i < hiddenNeurons.length; i++) {
+			for(int j = 0; j < hiddenNeurons[i].length; j++) {
+				double ogCost = calculateCost(desiredOutputs);
+				
+				hiddenNeurons[i][j].setBias(hiddenNeurons[i][j].getBias() + descentStep);
+				calculateNetwork();
+				
+				double newCost = calculateCost(desiredOutputs);
+				
+				if(newCost == ogCost) {
+					hiddenNeurons[i][j].setBias(hiddenNeurons[i][j].getBias() - descentStep);
+				}else if(newCost > ogCost) {
+					hiddenNeurons[i][j].setBias(hiddenNeurons[i][j].getBias() - 2*descentStep);
+				}
+				calculateNetwork();
+			}
 		}
 		
+		for(int i = 0; i < outputNeurons.length; i++) {
+			double ogCost = calculateCost(desiredOutputs);
+			
+			outputNeurons[i].setBias(outputNeurons[i].getBias() + descentStep);
+			calculateNetwork();
+			
+			double newCost = calculateCost(desiredOutputs);
+			
+			if(newCost == ogCost) {
+				outputNeurons[i].setBias(outputNeurons[i].getBias() - descentStep);
+			} else if(newCost > ogCost) {
+				outputNeurons[i].setBias(outputNeurons[i].getBias() - 2*descentStep);
+			}
+			calculateNetwork();
+		}
+	}
+	
+	//TODO: ADD THRESHOLD FOR THE EQUALS TO STATEMENT IN THE LOOPS
+	private void gradientDescentSynapses(double desiredOutputs[], double descentStep) {
+		//CONCEPT:
+		//If the new cost is less than the old cost, keep the change you made
+		//If the new cost is greater than the old cost, make a change in the other direction
+		//If the cost is the same, revert the change
 		
+		for(int i = 0; i < inputSynapses.length; i++) {
+			for(int j = 0; j < inputSynapses[i].length; j++) {
+				double ogCost = calculateCost(desiredOutputs);
+				
+				inputSynapses[i][j].setWeight(inputSynapses[i][j].getWeight() + descentStep);
+				calculateNetwork();
+				
+				double newCost = calculateCost(desiredOutputs);
+				
+				if(newCost == ogCost) {
+					inputSynapses[i][j].setWeight(inputSynapses[i][j].getWeight() - descentStep);
+				}else if(newCost > ogCost) {
+					inputSynapses[i][j].setWeight(inputSynapses[i][j].getWeight() - 2*descentStep);
+				}
+				calculateNetwork();
+			}
+		}
+		
+		for(int i = 0; i < hiddenSynapses.length; i++) {
+			for(int j = 0; j < hiddenSynapses[i].length; j++) {
+				for(int k = 0; k < hiddenSynapses[i][j].length; k++) {
+					double ogCost = calculateCost(desiredOutputs);
+					
+					hiddenSynapses[i][j][k].setWeight(hiddenSynapses[i][j][k].getWeight() + descentStep);
+					calculateNetwork();
+					
+					double newCost = calculateCost(desiredOutputs);
+					
+					if(newCost == ogCost) {
+						hiddenSynapses[i][j][k].setWeight(hiddenSynapses[i][j][k].getWeight() - descentStep);
+					}else if(newCost > ogCost) {
+						hiddenSynapses[i][j][k].setWeight(hiddenSynapses[i][j][k].getWeight() - 2*descentStep);
+					}
+					calculateNetwork();
+				}
+			}
+		}
+		
+		for(int i = 0; i < outputSynapses.length; i++) {
+			for(int j = 0; j < outputSynapses[i].length; j++) {
+				double ogCost = calculateCost(desiredOutputs);
+				
+				outputSynapses[i][j].setWeight(outputSynapses[i][j].getWeight() + descentStep);
+				calculateNetwork();
+				
+				double newCost = calculateCost(desiredOutputs);
+				
+				if(newCost == ogCost) {
+					outputSynapses[i][j].setWeight(outputSynapses[i][j].getWeight() - descentStep);
+				}else if(newCost > ogCost) {
+					outputSynapses[i][j].setWeight(outputSynapses[i][j].getWeight() - 2*descentStep);
+				}
+				calculateNetwork();
+			}
+		}
+	}
+	
+	//TODO: FIX THE THRESHOLD FOR THE GRADIENT DESCENTS
+	public void gradientDescent(double desiredOutputs[], double descentStep) {
+		gradientDescentSynapses(desiredOutputs, descentStep);
+		gradientDescentNeurons(desiredOutputs, descentStep);
+	}
+	
+	public double calculateCost(double desiredOutput[]) {
+		this.calculateNetwork();
+		
+		if(desiredOutput.length != outputNeurons.length) {
+			System.out.println("Desired outputs length does not match output neurons length. Check the desired outputs.");
+			return -1;
+		}
+		
+		double cost = 0.0;
+		for(int i = 0; i < outputNeurons.length; i++) {
+			cost += Math.pow((desiredOutput[i] - outputNeurons[i].getValue()), 2.0);
+		}
+		
+		return cost;
 	}
 	
 	public static void saveToFile(Network neuralNet, String path) throws IOException {
@@ -194,9 +321,9 @@ public class Network implements Serializable {
 	public Synapse[][] getHiddenSynapses(int layer) { return hiddenSynapses[layer]; }
 	public Synapse[][] getOutputSynapses() { return outputSynapses; }
 	
-	public Neuron[] getInputLayer() { return inputLayer; }
-	public Neuron[][] getHiddenLayer() { return hiddenLayers; }
-	public Neuron[] getHiddenLayer(int layer) { return hiddenLayers[layer]; }
-	public Neuron[] getOutputLayer() { return outputLayer; }
+	public Neuron[] getInputLayer() { return inputNeurons; }
+	public Neuron[][] getHiddenLayer() { return hiddenNeurons; }
+	public Neuron[] getHiddenLayer(int layer) { return hiddenNeurons[layer]; }
+	public Neuron[] getOutputLayer() { return outputNeurons; }
 	
 }
