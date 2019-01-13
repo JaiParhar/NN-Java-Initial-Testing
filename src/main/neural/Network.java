@@ -194,7 +194,7 @@ public class Network implements Serializable {
 				}else if(newCost > ogCost) {
 					hiddenNeurons[i][j].setBias(hiddenNeurons[i][j].getBias() - 2*descentStep);
 				}
-				calculateNetwork();
+				//calculateNetwork();
 			}
 		}
 		
@@ -211,7 +211,7 @@ public class Network implements Serializable {
 			} else if(newCost > ogCost) {
 				outputNeurons[i].setBias(outputNeurons[i].getBias() - 2*descentStep);
 			}
-			calculateNetwork();
+			//calculateNetwork();
 		}
 	}
 	
@@ -236,7 +236,7 @@ public class Network implements Serializable {
 				}else if(newCost > ogCost) {
 					inputSynapses[i][j].setWeight(inputSynapses[i][j].getWeight() - 2*descentStep);
 				}
-				calculateNetwork();
+				//calculateNetwork();
 			}
 		}
 		
@@ -255,7 +255,7 @@ public class Network implements Serializable {
 					}else if(newCost > ogCost) {
 						hiddenSynapses[i][j][k].setWeight(hiddenSynapses[i][j][k].getWeight() - 2*descentStep);
 					}
-					calculateNetwork();
+					//calculateNetwork();
 				}
 			}
 		}
@@ -274,13 +274,14 @@ public class Network implements Serializable {
 				}else if(newCost > ogCost) {
 					outputSynapses[i][j].setWeight(outputSynapses[i][j].getWeight() - 2*descentStep);
 				}
-				calculateNetwork();
+				//calculateNetwork();
 			}
 		}
 	}
 	
 	//TODO: FIX THE THRESHOLD FOR THE GRADIENT DESCENTS
 	public void gradientDescent(double desiredOutputs[], double descentStep) {
+		calculateNetwork();
 		gradientDescentSynapses(desiredOutputs, descentStep);
 		gradientDescentNeurons(desiredOutputs, descentStep);
 	}
