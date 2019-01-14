@@ -33,4 +33,8 @@ public class Utils {
         return obj;
     }
 	
+	public static boolean inThreshold(double a, double b, double threshold) {
+		return (Math.abs(a-b) <= threshold);
+	}
+	
 }

@@ -12,10 +12,15 @@ public class LanguageDetectionAI {
 	public static final int HIDDEN_NEURONS = 20;
 	public static final int OUTPUT_NEURONS = 10;
 	
+	public static final double TRAINING_STEP = 0.01;
+	public static final double TRAINING_THRESHOLD = 0.0;
+	
 	Network net;
 	
 	public LanguageDetectionAI() {
 		net = new Network(INPUT_NEURONS, HIDDEN_LAYERS, HIDDEN_NEURONS, OUTPUT_NEURONS);
+		net.randomizeNeuronBiases((int)System.currentTimeMillis(), 10);
+		net.randomizeSynapseWeights((int)System.currentTimeMillis(), 10);
 	}
 	
 	public int realRun(String input) {
@@ -77,9 +82,21 @@ public class LanguageDetectionAI {
 			}
 		}
 		
-		net.gradientDescent(desiredOutput, 0.01);
+		net.gradientDescent(desiredOutput, TRAINING_STEP, TRAINING_THRESHOLD);
 		
 		return net.calculateCost(desiredOutput);
+	}
+	
+	public void setNetwork(Network n) {
+		net = n;
+	}
+	
+	public Network getNetwork() {
+		return net;
+	}
+	
+	public Network defaultNet() {
+		return new Network(INPUT_NEURONS, HIDDEN_LAYERS, HIDDEN_NEURONS, OUTPUT_NEURONS);
 	}
 	
 }

@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
+import main.Utils;
+
 public class Network implements Serializable {
 
 	private static final long serialVersionUID = -9209288686210961120L;
@@ -173,8 +175,7 @@ public class Network implements Serializable {
 		
 	}
 	
-	//TODO: ADD THRESHOLD FOR THE EQUALS TO STATEMENT IN THE LOOPS
-	private void gradientDescentNeurons(double desiredOutputs[], double descentStep) {
+	private void gradientDescentNeurons(double desiredOutputs[], double descentStep, double threshold) {
 		//CONCEPT:
 		//If the new cost is less than the old cost, keep the change you made
 		//If the new cost is greater than the old cost, make a change in the other direction
@@ -189,12 +190,11 @@ public class Network implements Serializable {
 				
 				double newCost = calculateCost(desiredOutputs);
 				
-				if(newCost == ogCost) {
+				if(Utils.inThreshold(newCost, ogCost, threshold)) {
 					hiddenNeurons[i][j].setBias(hiddenNeurons[i][j].getBias() - descentStep);
 				}else if(newCost > ogCost) {
 					hiddenNeurons[i][j].setBias(hiddenNeurons[i][j].getBias() - 2*descentStep);
 				}
-				//calculateNetwork();
 			}
 		}
 		
@@ -206,17 +206,15 @@ public class Network implements Serializable {
 			
 			double newCost = calculateCost(desiredOutputs);
 			
-			if(newCost == ogCost) {
+			if(Utils.inThreshold(newCost, ogCost, threshold)) {
 				outputNeurons[i].setBias(outputNeurons[i].getBias() - descentStep);
 			} else if(newCost > ogCost) {
 				outputNeurons[i].setBias(outputNeurons[i].getBias() - 2*descentStep);
 			}
-			//calculateNetwork();
 		}
 	}
 	
-	//TODO: ADD THRESHOLD FOR THE EQUALS TO STATEMENT IN THE LOOPS
-	private void gradientDescentSynapses(double desiredOutputs[], double descentStep) {
+	private void gradientDescentSynapses(double desiredOutputs[], double descentStep, double threshold) {
 		//CONCEPT:
 		//If the new cost is less than the old cost, keep the change you made
 		//If the new cost is greater than the old cost, make a change in the other direction
@@ -231,12 +229,11 @@ public class Network implements Serializable {
 				
 				double newCost = calculateCost(desiredOutputs);
 				
-				if(newCost == ogCost) {
+				if(Utils.inThreshold(newCost, ogCost, threshold)) {
 					inputSynapses[i][j].setWeight(inputSynapses[i][j].getWeight() - descentStep);
 				}else if(newCost > ogCost) {
 					inputSynapses[i][j].setWeight(inputSynapses[i][j].getWeight() - 2*descentStep);
 				}
-				//calculateNetwork();
 			}
 		}
 		
@@ -250,12 +247,11 @@ public class Network implements Serializable {
 					
 					double newCost = calculateCost(desiredOutputs);
 					
-					if(newCost == ogCost) {
+					if(Utils.inThreshold(newCost, ogCost, threshold)) {
 						hiddenSynapses[i][j][k].setWeight(hiddenSynapses[i][j][k].getWeight() - descentStep);
 					}else if(newCost > ogCost) {
 						hiddenSynapses[i][j][k].setWeight(hiddenSynapses[i][j][k].getWeight() - 2*descentStep);
 					}
-					//calculateNetwork();
 				}
 			}
 		}
@@ -269,21 +265,19 @@ public class Network implements Serializable {
 				
 				double newCost = calculateCost(desiredOutputs);
 				
-				if(newCost == ogCost) {
+				if(Utils.inThreshold(newCost, ogCost, threshold)) {
 					outputSynapses[i][j].setWeight(outputSynapses[i][j].getWeight() - descentStep);
 				}else if(newCost > ogCost) {
 					outputSynapses[i][j].setWeight(outputSynapses[i][j].getWeight() - 2*descentStep);
 				}
-				//calculateNetwork();
 			}
 		}
 	}
 	
-	//TODO: FIX THE THRESHOLD FOR THE GRADIENT DESCENTS
-	public void gradientDescent(double desiredOutputs[], double descentStep) {
+	public void gradientDescent(double desiredOutputs[], double descentStep, double threshold) {
 		calculateNetwork();
-		gradientDescentSynapses(desiredOutputs, descentStep);
-		gradientDescentNeurons(desiredOutputs, descentStep);
+		gradientDescentSynapses(desiredOutputs, descentStep, threshold);
+		gradientDescentNeurons(desiredOutputs, descentStep, threshold);
 	}
 	
 	public double calculateCost(double desiredOutput[]) {
