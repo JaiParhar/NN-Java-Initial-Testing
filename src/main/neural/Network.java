@@ -186,7 +186,6 @@ public class Network implements Serializable {
 				double ogCost = calculateCost(desiredOutputs);
 				
 				hiddenNeurons[i][j].setBias(hiddenNeurons[i][j].getBias() + descentStep);
-				calculateNetwork();
 				
 				double newCost = calculateCost(desiredOutputs);
 				
@@ -202,7 +201,6 @@ public class Network implements Serializable {
 			double ogCost = calculateCost(desiredOutputs);
 			
 			outputNeurons[i].setBias(outputNeurons[i].getBias() + descentStep);
-			calculateNetwork();
 			
 			double newCost = calculateCost(desiredOutputs);
 			
@@ -225,7 +223,6 @@ public class Network implements Serializable {
 				double ogCost = calculateCost(desiredOutputs);
 				
 				inputSynapses[i][j].setWeight(inputSynapses[i][j].getWeight() + descentStep);
-				calculateNetwork();
 				
 				double newCost = calculateCost(desiredOutputs);
 				
@@ -243,7 +240,6 @@ public class Network implements Serializable {
 					double ogCost = calculateCost(desiredOutputs);
 					
 					hiddenSynapses[i][j][k].setWeight(hiddenSynapses[i][j][k].getWeight() + descentStep);
-					calculateNetwork();
 					
 					double newCost = calculateCost(desiredOutputs);
 					
@@ -261,7 +257,6 @@ public class Network implements Serializable {
 				double ogCost = calculateCost(desiredOutputs);
 				
 				outputSynapses[i][j].setWeight(outputSynapses[i][j].getWeight() + descentStep);
-				calculateNetwork();
 				
 				double newCost = calculateCost(desiredOutputs);
 				

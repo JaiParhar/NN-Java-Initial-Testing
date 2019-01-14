@@ -10,8 +10,8 @@ public class Main {
 		
 		LanguageDetectionAI ai = new LanguageDetectionAI();
 		
-		int i = 0;
-		/*while(true) {
+		/*int i = 0;
+		while(true) {
 			i++;
 			System.out.println(ai.trainingRun("a", 0) + " a");
 			System.out.println(ai.trainingRun("b", 1) + " b");
