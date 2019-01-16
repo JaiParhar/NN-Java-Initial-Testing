@@ -8,6 +8,18 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+		String englishDataset = "";
+		String mandarinDataset = "";
+		
+		try {
+			englishDataset = Utils.readFile("./res/English.dataset");
+			mandarinDataset = Utils.readFile("./res/Mandarin.dataset");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
 		LanguageDetectionAI ai = new LanguageDetectionAI();
 		
 		/*int i = 0;
