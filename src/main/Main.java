@@ -8,6 +8,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+		LanguageDetectionAI ai = new LanguageDetectionAI();
+		
 		String englishDataset = "";
 		String mandarinDataset = "";
 		
@@ -18,9 +20,18 @@ public class Main {
 			e.printStackTrace();
 		}
 		
+		int start = 0;
+		int end = 1000;
+		for(int i = start; i < start+end; i++) {
+			System.out.println(Utils.getLine(englishDataset, i) + " has cost of " + ai.trainingRun(Utils.getLine(englishDataset, i), 0));
+			System.out.println(Utils.getLine(mandarinDataset, i) + " has cost of " + ai.trainingRun(Utils.getLine(mandarinDataset, i), 1));
+		}
 		
-		
-		LanguageDetectionAI ai = new LanguageDetectionAI();
+		try {
+			Network.saveToFile(ai.getNetwork(), "C:/Users/Kush/Desktop/Saved Neural Nets/EnglishMandarinNetwork.nn");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		/*int i = 0;
 		while(true) {

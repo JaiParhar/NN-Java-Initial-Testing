@@ -4,13 +4,13 @@ import main.neural.Network;
 
 public class LanguageDetectionAI {
 
-	public static final int MAX_WORD_LENGTH = 1;
+	public static final int MAX_WORD_LENGTH = 10;
 	public static final int ALPHABET_LENGTH = 26;
 	
 	public static final int INPUT_NEURONS = ALPHABET_LENGTH * MAX_WORD_LENGTH;
 	public static final int HIDDEN_LAYERS = 1;
 	public static final int HIDDEN_NEURONS = 20;
-	public static final int OUTPUT_NEURONS = 10;
+	public static final int OUTPUT_NEURONS = 2;
 	
 	public static final double TRAINING_STEP = 0.01;
 	public static final double TRAINING_THRESHOLD = 0.0;
